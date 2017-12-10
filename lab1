@@ -1,0 +1,13 @@
+#!/bin/bash
+#part 2
+wget http://factorized.net/crusoe.txt
+find *txt
+grep "friday" crusoe.txt
+echo "hello world" >> crusoe.txt
+echo "hello world" > crusoe.txt
+touch quantity.txt
+ls >> quantity.txt
+
+#part 3
+grep -c "Friday" crusoe.txt
+sed -i "s/Friday/Saturday/g" crusoe.txt
