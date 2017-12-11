@@ -1,13 +1,4 @@
 #!/bin/bash
-#part 1
-mkdir der
-touch file.txt
-mv file.txt der 
-cd der 
-ls 
-rm file.txt
-cd
-rmdir der
 #part 2
 wget http://factorized.net/crusoe.txt
 find *txt
