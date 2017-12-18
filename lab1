@@ -9,5 +9,5 @@ touch quantity.txt
 ls >> quantity.txt
 
 #part 3
-grep -c "Friday" crusoe.txt
+grep -o -i "Friday" crusoe.txt | wc -w
 sed -i "s/Friday/Saturday/g" crusoe.txt
