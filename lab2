@@ -1,0 +1,30 @@
+#!/bin/bash
+#part 2
+which cat
+which less
+which grep
+which find
+whereis cat
+whereis less
+whereis grep
+whereis find
+echo $PATH
+touch rtr.sh
+nano rtr.sh
+#!/bin/bash
+echo "Hello world"
+^X
+chmod +x rtr.sh
+./rtr.sh
+export PATH = $PATH:/home/students/17205/zaitsev
+gcc rtr.sh
+
+
+#part 3
+cd
+touch  shared.txt
+chmod o=r shared.txt
+chmod shvecova shared.txt
+mkdir Hello
+chmod o=r Hello
+chmod shvecova Hello
