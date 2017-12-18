@@ -10,4 +10,4 @@ ls >> quantity.txt
 
 #part 3
 grep -o -i "Friday" crusoe.txt | wc -w
-sed -i "s/Friday/Saturday/g" crusoe.txt
+sed -i "s/Friday/Saturday/gI" crusoe.txt | grep -o -i "Saturday" | wc -w
