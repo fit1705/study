@@ -17,7 +17,7 @@ export PATH = $PATH:/home/students/17205/zaitsev
 #part 3
 #!/bin/bash
 touch file.txt
-ls -l shared.txt
+ls -l file.txt
 chmod 400 file.txt
 ls file.txt
 scp file.txt leonov@84.237.52.20:file.txt
