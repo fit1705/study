@@ -1,0 +1,42 @@
+#!/bin/bash
+#part1 
+ping ya.ru
+traceroute ya.ru
+nslookup yandex.ru
+
+
+
+
+#part 2
+
+#first
+#!/bin/bash
+count=$1
+while [ $count -gt 0 ]
+do
+(( count-- ))
+echo "hello world!"
+done
+
+#second 
+#!/bin/bash
+echo "$(( $1+$2 ))"
+
+#third 
+#!/bin/bash
+if [ "$3" == "add" ]
+then
+echo "$(( $1+$2 ))"
+fi
+if [ "$3" == "sub" ]
+then
+echo "$(( $1-$2 ))"
+fi
+if [ "$3" == "mul" ]
+then
+echo "$(( $1*$2 ))"
+fi
+if [ "$3" == "div" ]
+then
+echo "$(( $1/$2 ))"
+fi
