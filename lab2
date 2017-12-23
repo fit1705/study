@@ -10,8 +10,10 @@ whereis grep
 whereis find
 echo $PATH
 touch rtr.sh
-#!/bin/bash
-printf "Hello world"
+int main (){
+printf "Hello world";
+return 0;
+}
 chmod +x rtr.sh
 gcc rtr.sh
 export PATH = $PATH:/home/students/17205/zaitsev
