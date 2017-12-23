@@ -2,7 +2,7 @@
 #part 2
 wget http://factorized.net/crusoe.txt
 find *txt
-grep "friday" crusoe.txt.1
+#grep "friday" crusoe.txt.1
 grep -o -i "Friday" crusoe.txt.1 | wc -l
 sed -i "s/Friday/Saturday/gI" crusoe.txt | grep -o -i "Saturday" | wc -w
 echo "hello world" >> crusoe.txt
