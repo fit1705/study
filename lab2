@@ -12,8 +12,7 @@ echo $PATH
 touch rtr.sh
 nano rtr.sh
 #!/bin/bash
-echo "Hello world"
-^X
+printf "Hello world"
 chmod +x rtr.sh
 ./rtr.sh
 export PATH = $PATH:/home/students/17205/zaitsev
