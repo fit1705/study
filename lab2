@@ -14,9 +14,8 @@ nano rtr.sh
 #!/bin/bash
 printf "Hello world"
 chmod +x rtr.sh
-./rtr.sh
-export PATH = $PATH:/home/students/17205/zaitsev
 gcc rtr.sh
+export PATH = $PATH:/home/students/17205/zaitsev
 
 
 #part 3
