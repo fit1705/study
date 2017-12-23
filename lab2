@@ -9,14 +9,8 @@ whereis less
 whereis grep
 whereis find
 echo $PATH
-touch rtr.sh
-nano rtr.sh
-int main() {
-    printf("Hello, World!");
-    return 0;
-}
-chmod +x rtr.sh
-gcc rtr.sh
+
+gcc helloWorld.c -o helloWorld
 export PATH = $PATH:/home/students/17205/zaitsev
 
 
