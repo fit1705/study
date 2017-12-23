@@ -10,7 +10,7 @@ whereis grep
 whereis find
 echo $PATH
 
-gcc helloWorld.c -o helloWorld.c
+gcc helloWorld.c -o helloWorld
 export PATH = $PATH:/home/students/17205/zaitsev
 
 
