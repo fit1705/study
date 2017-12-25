@@ -1,0 +1,9 @@
+grep -E -i -o "\b(z\w+)" /home/students/17200/zaitsev/crusoe.txt.2
+grep -E -i -o \\w\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w\\w /home/students/17200/zaitsev/crusoe.txt.2
+grep -E -i -o "\b(a\w+)c\b" /home/students/17200/zaitsev/crusoe.txt.2
+grep -E -i -o "\bab[^o]\w*\b" /home/students/17200/zaitsev/crusoe.txt.2
+
+grep -E  -i -x "[0-9]*" /home/students/17200/zaitsev/patterns.txt
+grep -E -i -x "[A-Z]*" /home/students/17200/zaitsev/patterns.txt
+
+grep -E "\b[ABEKMHOPCTYX][0-9]{3}[ABEKMHOPCTYX]{2}[0-9]{2,3}\b" /home/students/17200/zaitsev/patterns.txt > kol.txt
