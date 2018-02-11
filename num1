@@ -28,9 +28,6 @@ List *add_element(List *el, List *list){
 }
  
 void _delete(List* cur, int key) {
-//	List* cur = tmp;
-//	if (cur -> next == NULL)
-//		return 0;
 	if (!cur){
 		printf ("ERROR");
 		return ;
@@ -82,6 +79,7 @@ int main(){
 		} 
 		printf("\n");
 	}	
+	
 	printf ("---------------------\n");
 	if (arr[v1]-> vertex == v2){
 		if (arr[v1] -> next == NULL)
@@ -100,6 +98,7 @@ int main(){
 	}
 	else
 	_delete (arr[v2], v1);
+	
 		for (int i = 0; i < n; i++){	
 		temp = arr[i];
 		while (temp){
