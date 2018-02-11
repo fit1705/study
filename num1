@@ -1,0 +1,113 @@
+#include <malloc.h>
+#include <stdio.h>
+#define List struct list
+ 
+List {
+	int vertex;
+	int cost;
+	List* next;
+};
+ 
+List *init_list(int vertex, int cost){
+	List *tmp = (List*) malloc(sizeof(List));
+	tmp->vertex = vertex;
+	tmp->cost = cost;
+	tmp->next = NULL;
+	return tmp;
+}
+List *add_element(List *el, List *list){
+	List *tmp = list;
+	List *origin = list;
+	if (!list)
+		return el;
+ 
+	while (tmp->next)
+	tmp = tmp->next;
+	tmp->next = el; 
+	return origin;
+}
+ 
+void _delete(List* cur, int key) {
+//	List* cur = tmp;
+//	if (cur -> next == NULL)
+//		return 0;
+	if (!cur){
+		printf ("ERROR");
+		return ;
+	}
+	while (cur -> next){
+		//	printf ("111  ");
+		if (cur -> next -> vertex == key){
+			List *del = cur -> next;
+			if ( del -> next == NULL)
+				cur -> next = NULL;
+			else 
+				cur -> next = del -> next;
+			free (del);
+			return ;
+		}
+		if (cur -> next == NULL){
+			printf ("ERROR");
+			return ;
+		}
+		cur = cur -> next;
+	
+	}
+	return ;
+} 
+ 
+int main(){
+	int n;
+	FILE* in = fopen("in.txt", "r");
+	fscanf(in, "%d", &n);
+	List** arr = (List**) malloc(sizeof(List *)*n);
+	char c;
+	int a, b;
+	for (int i = 0; i < n; i++){
+	arr[i] = NULL;
+	do {
+		fscanf(in, "%d:%d%c", &a, &b, &c);
+		arr[i] = add_element(init_list(a,b), arr[i]);
+	} while (c!='\n');
+
+	}
+	int v1, v2;
+	fscanf(in, "%d %d", &v1, &v2);
+	List* temp;
+	for (int i = 0; i < n; i++){	
+		temp = arr[i];
+		while (temp){
+			printf("%d:%d ", temp->vertex, temp->cost);
+			temp = temp->next;
+		} 
+		printf("\n");
+	}	
+	printf ("---------------------\n");
+	if (arr[v1]-> vertex == v2){
+		if (arr[v1] -> next == NULL)
+			arr [v1] = NULL;
+		else
+			arr[v1] = arr[v1] -> next;
+	}
+	else
+	_delete (arr[v1], v2);
+	
+	if (arr[v2]-> vertex == v1){
+		if (arr[v2] -> next == NULL)
+			arr [v2] = NULL;
+		else
+			arr[v2] = arr[v2] -> next;
+	}
+	else
+	_delete (arr[v2], v1);
+		for (int i = 0; i < n; i++){	
+		temp = arr[i];
+		while (temp){
+			printf("%d:%d ", temp->vertex, temp->cost);
+			temp = temp->next;
+		} 
+		printf("\n");
+		}	
+	fclose(in);
+	return 0;
+}
