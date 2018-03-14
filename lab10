@@ -1,0 +1,285 @@
+#ifndef CHECK_H
+#define CHECK_H
+//is_visited validation function
+int check (int *is_visited, int n){
+	int i = 0;
+	while (i < n){
+		if (is_visited[i] == 0)
+			return 1;
+		i++;
+	}
+return 0;
+}
+
+#endif
+
+
+
+#ifndef FUNCTIONS_H
+#define FUNCTIONS_H
+#include "check.h"
+List{
+	int vertex;
+	int cost;
+	List *next;
+};
+
+//creating an element
+List *init_list(int vertex,int edge){
+	List *tmp = (List*) malloc(sizeof(List));
+	tmp->vertex = vertex;
+    tmp->cost = edge;
+    
+    tmp->next = NULL;
+    return tmp;
+}
+
+//adding an element
+List  *add_element (List *el, List *list){
+    List *tmp = list;
+	List *origin = list;
+	if (!list)
+		return el;
+
+    tmp = el;
+    tmp -> next = origin;
+    return tmp;
+}
+
+//performing function of distance calculation
+int function (List **arr, unsigned int *distance, int *is_visited,int ver, int *num_of_int, int n ){
+	List *tmp = arr[ver];
+	unsigned int dis = UINT_MAX;
+	int V ;
+	int a;
+	//mark the vertex of the visited
+	is_visited[ver] = 1;
+	//check whether it last
+	a = check (is_visited, n);
+
+	while (tmp){
+	    //if vertex is not visited or last
+		if (((is_visited[tmp->vertex]) == 0) || (a == 0)) {
+			//if way is INT_MAX
+			if (tmp-> cost == INT_MAX){
+				//if the number of INT_MAX at the vertex is greater than when the summation then replace
+				if (num_of_int[ver] + 1 < num_of_int[tmp->vertex]){
+					num_of_int[tmp->vertex] = num_of_int[ver] + 1;
+				    distance[tmp->vertex] = distance[ver];	
+				}
+			}
+		    else{
+				//if way plus a digit in vertex is less than the distance then replace
+				if ( (tmp->cost + distance[ver]) < distance[tmp->vertex]){
+				    distance[tmp->vertex] = tmp->cost + distance[ver];
+				    num_of_int[tmp->vertex] = num_of_int [ver];
+				}
+		    
+		    }
+			//searching for the shortest distance to run the next vertex
+			if (distance[tmp->vertex] < dis){
+				V = tmp->vertex;
+				dis = distance[tmp->vertex];
+		    }
+    	}	
+	    tmp = tmp -> next;
+	}
+	// if dis is not change than error
+	if (dis == UINT_MAX)
+		return -1000;
+	//return new vertex
+	return V;
+}
+
+//performing function of printing
+void printing (List **arr, unsigned int *distance, int ver, int *num_of_int, FILE *fout, int start){
+    if (ver == start)
+        fprintf (fout, "%d\n", start);
+    List *tmp = arr[ver];
+    
+    while (tmp){
+        //if way = INT_MAX
+        if (tmp -> cost == INT_MAX){
+            //checking array of INT_MAX
+            if (num_of_int[ver]-1 == num_of_int[tmp->vertex]){
+                fprintf (fout, "%d ", ver);
+                printing (arr, distance, tmp->vertex, num_of_int, fout,start);
+            }
+        }
+        else 
+        //else checking array of distance
+            if (distance[ver] - tmp->cost == distance [tmp->vertex]){
+                fprintf (fout, "%d ", ver);
+                printing (arr, distance, tmp->vertex, num_of_int, fout, start);
+            }
+  
+        tmp = tmp ->next;
+    }
+return;
+}
+#endif
+
+
+
+#include <stdio.h>
+#include <malloc.h>
+#include <limits.h>
+#define List struct list
+#include "functions.h"
+#include "check.h"
+int main (){
+
+	FILE *fin, *fout;                      
+	fin=fopen("in.txt", "r");                    // open file in.txt
+	fout=fopen("out.txt", "w");                  // open file out.txt
+	
+	//input of the number of vertices
+	int num_of_ver;
+	fscanf (fin, "%d", &num_of_ver);
+	
+	//verifying the number of vertices
+	if ((num_of_ver > 5000) || (num_of_ver < 0)){
+		fprintf (fout, "bad number of vertices");
+		fclose (fout);
+		return 0;
+	}
+	
+	// input 2 vertices (start, end)
+	int ver_1, ver_2;
+	fscanf (fin, "%d %d", &ver_1, &ver_2);
+	
+	// input the number of edges
+	int num_of_edge;
+	fscanf (fin, "%d", &num_of_edge);
+	
+	// verifying the number of edges
+	//first test
+	if ((num_of_edge > ((num_of_ver)*(num_of_ver-1)/2)) || (num_of_edge < 0)){
+		fprintf (fout, "bad number of edges");
+		fclose (fout);
+		return 0;
+	}
+    //second test
+	if (num_of_ver == 0){
+		fprintf (fout, "bad vertex");
+		fclose (fout);
+		return 0;
+	}
+    //third test
+	if (num_of_edge == 0){
+	    if (ver_1 == 1 && ver_2 == 1){
+	        fprintf (fout, "0 \n 1");
+	        fclose (fout);
+	        return 0;}
+		else{
+		fprintf (fout, "0 oo\n");
+		fprintf (fout, "no path");
+		fclose (fout);
+		return 0;}
+	} 
+	
+    // creating and filling in list of elements
+	List** arr_list = (List**) malloc(sizeof(List *)*(num_of_ver+1));
+	int numer;
+	for (numer = 0; numer < num_of_ver+1 ; numer++)
+	arr_list [numer] = NULL;
+    // cycle of scanning and filling of lists in an array 
+	int old_peak_1, old_peak_2;
+	int peak_1, peak_2, edge;
+    int correct;
+	for (numer = 0; numer < num_of_edge ; numer++){
+		fscanf (fin, "%d %d %d", &peak_1, &peak_2, &edge);
+        //verifying vertexs 
+		if ((peak_1 < 1) || (peak_1 > num_of_ver) || (peak_2 < 1) || (peak_2 > num_of_ver)){
+			fprintf (fout, "bad vertex");
+			fclose (fout);
+			free (arr_list);
+			return 0;
+		}
+		//verifying edges
+		if ((edge > INT_MAX) || (edge < 0)){
+			fprintf (fout, "bad length");
+			fclose (fout);
+			free (arr_list);
+			return 0;
+		}
+		//verifying lines
+		if ((old_peak_1 == peak_1) && (old_peak_2 == peak_2)){
+			fprintf (fout, "bad number of lines");
+			fclose (fout);
+			free (arr_list);
+			return 0;
+		}
+		// filling list
+		arr_list[peak_1] = add_element (init_list(peak_2,edge), arr_list[peak_1]);
+		arr_list[peak_2] = add_element (init_list(peak_1,edge), arr_list[peak_2]);
+		old_peak_1 = peak_1;
+		old_peak_2 = peak_2;
+		
+	} 
+	
+	// creating and filling in array of distance
+    unsigned int *distance = (unsigned int*)malloc(num_of_ver*sizeof(unsigned int));
+    for (numer = 0; numer < num_of_ver+1 ; numer++)
+		distance[numer] = UINT_MAX;
+	distance[0] = 0;
+	distance[ver_1] = 0;
+	
+	// creating and filling in array of numbers of INT_MAX
+	int *num_of_int = (int*)malloc (num_of_ver*sizeof(int));
+	for (numer = 0; numer < num_of_ver+1 ; numer++)
+		num_of_int[numer] = 5;
+	num_of_int[0]=0;
+	num_of_int[ver_1] = 0;
+	
+	// creating and filling in array of visitation
+	int *is_visited = (int*)malloc (num_of_ver*sizeof(int));
+	for (numer = 0; numer < num_of_ver+1 ; numer++)
+		is_visited[numer] = 0;
+	is_visited [0] = 1;
+	
+	int Vertex;
+	old_peak_1 = ver_1;
+    //performing function of distance calculation
+	while (check(is_visited, num_of_ver)){
+		Vertex = function (arr_list, distance, is_visited, ver_1, num_of_int, num_of_ver);
+		if (Vertex == -1000){
+		    // if we have a mistake we should exit
+			for (numer = 0; numer < num_of_ver+1 ; numer++)
+			    is_visited[numer] = 1;
+		}
+		ver_1 = Vertex;
+	}
+ 
+    //1 part of performing the printing function
+	for (numer = 1; numer < num_of_ver+1 ; numer++){
+		//if no way
+		if (distance[numer] == UINT_MAX)
+			fprintf (fout,"oo");
+		//if way > INT_MAX
+		if ((num_of_int[numer] > 1) && (num_of_int [numer] !=5))
+			fprintf (fout,"INT_MAX+ ");
+	    //if way = INT_MAX
+	    if (num_of_int[numer] == 1)
+	        fprintf (fout, "2147483647 ");
+	    //if way < INT_MAX
+	    if (num_of_int[numer] == 0 ){
+	        if (distance[numer] == 0)
+	            fprintf (fout, "0 ");
+	        else 
+	            fprintf (fout,"%u ", distance[numer]);
+	    }
+	}
+	//cycle of checking the number of INT_MAX
+	Vertex = 0;
+	for (numer = 1; numer < num_of_ver+1 ; numer++)
+	    if (num_of_int [numer] > 0 && num_of_int[numer] < 5 && numer!= ver_2)
+	        Vertex++;
+    //2 part of performing the printing function
+    fprintf (fout, "\n");
+    if (num_of_int[ver_2] > 1 && num_of_int[ver_2] < 5 && Vertex >= 2 )
+        fprintf (fout, "overflow");
+    else 
+        printing (arr_list, distance, ver_2, num_of_int, fout, old_peak_1);
+	return 0;  
+}
