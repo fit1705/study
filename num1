@@ -1,112 +1,94 @@
-#include <malloc.h>
 #include <stdio.h>
+#include <malloc.h>
+#define Vertex struct vertex 
 #define List struct list
- 
-List {
-	int vertex;
-	int cost;
-	List* next;
-};
- 
-List *init_list(int vertex, int cost){
-	List *tmp = (List*) malloc(sizeof(List));
-	tmp->vertex = vertex;
-	tmp->cost = cost;
-	tmp->next = NULL;
-	return tmp;
-}
-List *add_element(List *el, List *list){
-	List *tmp = list;
-	List *origin = list;
-	if (!list)
-		return el;
- 
-	while (tmp->next)
-	tmp = tmp->next;
-	tmp->next = el; 
-	return origin;
-}
- 
-void _delete(List* cur, int key) {
-	if (!cur){
-		printf ("ERROR");
-		return ;
-	}
-	while (cur -> next){
-		//	printf ("111  ");
-		if (cur -> next -> vertex == key){
-			List *del = cur -> next;
-			if ( del -> next == NULL)
-				cur -> next = NULL;
-			else 
-				cur -> next = del -> next;
-			free (del);
-			return ;
-		}
-		if (cur -> next == NULL){
-			printf ("ERROR");
-			return ;
-		}
-		cur = cur -> next;
-	
-	}
-	return ;
-} 
- 
-int main(){
-	int n;
-	FILE* in = fopen("in.txt", "r");
-	fscanf(in, "%d", &n);
-	List** arr = (List**) malloc(sizeof(List *)*n);
-	char c;
-	int a, b;
-	for (int i = 0; i < n; i++){
-	arr[i] = NULL;
-	do {
-		fscanf(in, "%d:%d%c", &a, &b, &c);
-		arr[i] = add_element(init_list(a,b), arr[i]);
-	} while (c!='\n');
 
-	}
-	int v1, v2;
-	fscanf(in, "%d %d", &v1, &v2);
-	List* temp;
-	for (int i = 0; i < n; i++){	
-		temp = arr[i];
-		while (temp){
-			printf("%d:%d ", temp->vertex, temp->cost);
-			temp = temp->next;
-		} 
-		printf("\n");
-	}	
-	
-	printf ("---------------------\n");
-	if (arr[v1]-> vertex == v2){
-		if (arr[v1] -> next == NULL)
-			arr [v1] = NULL;
-		else
-			arr[v1] = arr[v1] -> next;
-	}
-	else
-	_delete (arr[v1], v2);
-	
-	if (arr[v2]-> vertex == v1){
-		if (arr[v2] -> next == NULL)
-			arr [v2] = NULL;
-		else
-			arr[v2] = arr[v2] -> next;
-	}
-	else
-	_delete (arr[v2], v1);
-	
-		for (int i = 0; i < n; i++){	
-		temp = arr[i];
-		while (temp){
-			printf("%d:%d ", temp->vertex, temp->cost);
-			temp = temp->next;
-		} 
-		printf("\n");
-		}	
-	fclose(in);
-	return 0;
+List {
+  List *next;
+  Vertex* vert;
+};
+
+Vertex {
+  int item;
+  int color;
+  List* conflicts;
+};
+
+List* add_list(List* L, Vertex* v){
+  List* tmp = (List*)malloc(sizeof(List));
+  tmp-> vert = v;
+  tmp->next = NULL;
+    if(!L)
+      return tmp;
+  List* cur = L;
+  while (cur->next)
+    cur = cur->next;
+  cur->next = tmp;
+  return L;
+}
+
+Vertex* add_vert(int v){
+  Vertex* tmp = (Vertex*)malloc(sizeof(Vertex));
+  tmp->item = v;
+  tmp->color = 0;
+  tmp->conflicts = NULL;
+  return tmp;
+}
+
+Vertex* index(List* L, int id){
+  List* cur = L;
+  if (!L)
+    return NULL;
+  while((cur)&&(cur->vert->item != id))
+    cur = cur-> next;
+  if (!cur)
+    return NULL;
+  return cur->vert;
+} 
+
+void add_conflict(List* L, int first, int second){
+  Vertex* F = index(L, first);
+  Vertex* S = index(L, second);
+  add_list(F->conflicts, S);
+  add_list(S->conflicts, F);
+}
+
+void print(List *L, FILE *fout){
+  List* cur = L;
+  List* cur_vert;
+  //Vertex* v;
+  //printf("2check");
+  while(cur){
+    cur_vert = cur->vert->conflicts;
+    fprintf(fout,"1check");
+    while(cur_vert){
+        fprintf(fout,"3check");
+      fprintf(fout, "%d ", cur_vert->vert->item);
+      cur_vert = cur_vert->next;
+    }
+    fprintf(fout,"\n");
+    cur = cur->next;
+  }
+}
+
+int main() {
+  FILE *fin;
+  fin = fopen("in.txt", "r");
+  FILE *fout;
+  fout = fopen("out.txt" , "w");
+  int i =0;
+  List* G = NULL;
+  int N =0;
+  int M = 0;
+  int animal1;
+  int animal2;
+  fscanf (fin, "%d %d", &N , &M);
+  for (i = 0; i < N; i++){
+    G = add_list(G, add_vert(i));
+  }
+  for (i = 0; i < M; i++){
+    fscanf(fin, "%d %d", &animal1 , &animal2);
+      add_conflict(G,  animal1 - 1, animal2 - 1);
+  }
+    print(G, fout);
 }
